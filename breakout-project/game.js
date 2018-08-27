@@ -28,6 +28,25 @@ function drawBricks() {
     }
 }
 
+function drawOuterBricks() {
+    for(var c=0; c<brickColumnCount; c++) {
+        for(var r=0; r<outerRowCount; r++) {
+          if(outerBricks[c][r].status == 1) {
+            var outerBrickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
+            var outerBrickY = (r*(brickHeight+brickPadding) + (brickRowCount * (brickPadding + brickHeight)))+brickOffsetTop;
+            outerBricks[c][r].x = outerBrickX;
+            outerBricks[c][r].y = outerBrickY;
+            canvas.beginPath();
+            canvas.rect(outerBrickX, outerBrickY, brickWidth, brickHeight)
+            // console.log(brickX+ outerBrickY);
+            canvas.fillStyle = "green"
+            // canvas.fillStyle = 'hsl(' + 360 * Math.random() + ', 50%, 50%)';
+            canvas.fill();
+            canvas.closePath();
+          }
+        }
+    }
+}
 
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -50,7 +69,28 @@ function collisionDetection() {
                 dy = -dy;
                 brick.status = 0
                 score++
-                if(score === brickRowCount*brickColumnCount) {
+                if(score === (outerRowCount + brickRowCount) * brickColumnCount) {
+                        alert("YOU WIN, CONGRATULATIONS!");
+                        document.location.reload();
+                }
+              }
+
+            }
+        }
+    }
+}
+
+function outerCollisionDetection() {
+    for(var c=0; c<brickColumnCount; c++) {
+        for(var r=0; r<outerRowCount; r++) {
+            var outerBrick = outerBricks[c][r];
+            if(outerBrick.status ===1){
+              if(x > outerBrick.x && x < outerBrick.x+brickWidth && y > outerBrick.y && y < outerBrick.y+brickHeight) {
+                color = getRandomColor();
+                dy = -dy;
+                outerBrick.status = 0
+                score++
+                if(score === outerRowCount*brickColumnCount + outerRowCount*brickColumnCount) {
                         alert("YOU WIN, CONGRATULATIONS!");
                         document.location.reload();
                 }

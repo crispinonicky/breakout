@@ -9,13 +9,15 @@ var paddleHeight = 15;
 var paddleWidth = 135;
 var paddleX = (canvas2.width-paddleWidth)/2;
 
-var brickRowCount = 5;
+var brickRowCount = 4;
 var brickColumnCount = 5;
 var brickWidth = 80;
 var brickHeight = 20;
 var brickPadding = 10;
 var brickOffsetTop = 40;
 var brickOffsetLeft = 30;
+
+var outerRowCount = 1;
 
 var bulletX = (paddleX + paddleWidth/2)
 
@@ -27,6 +29,14 @@ for(var c=0; c<brickColumnCount; c++) {
     }
 }
 
+var outerBricks = [];
+for(var c=0; c<brickColumnCount; c++) {
+    outerBricks[c] = [];
+    for(var r=0; r<outerRowCount; r++) {
+        outerBricks[c][r] = { x: 0, y: brickRowCount, status: 1 };
+    }
+}
+
 var score = 0
 
 function draw (){
@@ -34,13 +44,16 @@ function draw (){
 canvas2.style.background = "black";
   drawBricks()
 
+  drawOuterBricks()
+  
+
   drawBall()
 
   // drawBullet()
 
   drawPaddle()
 
-
+  outerCollisionDetection()
   collisionDetection()
 
   drawScore()
